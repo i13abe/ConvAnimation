@@ -8,10 +8,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2 # PRのbranchへcheckout
-      - name: Set up Python 3.8
+      - name: Set up Python 3.9.2
         uses: actions/setup-python@v2 #pythonをダウンロードする
         with:
-          python-version: 3.8 #pythonのダウンロードバージョン
+          python-version: 3.9.2 #pythonのダウンロードバージョン
       - name: Install Poetry
         run: |
           curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python  # poetryのインストール
