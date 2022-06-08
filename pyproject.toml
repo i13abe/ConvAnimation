@@ -28,7 +28,7 @@ enable_isort = true
 enable_mypy = true
 mypy_preset = "entry"
 line_length = 100
-py_version = "py38"
+py_version = "py39"
 
 # mypy target設定
 [[tool.pysen.lint.mypy_targets]]
