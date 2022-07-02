@@ -13,8 +13,13 @@ format:
 test:
 	poetry run pytest -s -vv ./tests
 
-
 # get mnist image
 .PHONY: get_mnist
 get_mnist:
 	poetry run python -m conv_animation.get_mnist_image
+
+# get animation
+.PHONY: anim
+anim:
+	poetry run python -m conv_animation.image_visualization
+
