@@ -23,3 +23,9 @@ get_mnist:
 anim:
 	poetry run python -m conv_animation.image_visualization
 
+
+# show manim
+.PHINY: manim
+manim:
+	cd conv_animation && \
+	poetry run manim -p -ql conv_animation.py ConvAnim

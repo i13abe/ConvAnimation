@@ -1,4 +1,4 @@
-from .image_processing import writeMNIST
+from image_processing import writeMNIST
 
 
 def main() -> None:

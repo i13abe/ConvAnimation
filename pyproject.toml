@@ -8,6 +8,7 @@ authors = ["i13abe <i13abemotoshi@gmail.com>"]
 python = "^3.8"
 opencv-python = "^4.6.0"
 matplotlib = "^3.5.2"
+manimgl = "^1.6.1"
 
 [tool.poetry.dev-dependencies]
 pysen = {extras = ["lint"], version = "^0.10.1"}

@@ -3,7 +3,7 @@ from typing import Any, Tuple
 import torch.nn as nn
 from torchvision import transforms as transforms
 
-from .image_processing import readImage
+from image_processing import readImage
 
 
 def convImage(img_path: str) -> Tuple[Any, Any, Any]:
