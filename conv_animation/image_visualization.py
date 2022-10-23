@@ -3,9 +3,8 @@ from typing import Any
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.animation import FuncAnimation
-
 from convolution import convImage
+from matplotlib.animation import FuncAnimation
 
 
 def showImage(img_path: str) -> None:
