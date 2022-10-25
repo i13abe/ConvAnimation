@@ -30,4 +30,4 @@ anim:
 .PHINY: manim
 manim:
 	cd conv_animation && \
-	poetry run manim -p -ql conv_animation.py ConvAnim
+	poetry run manim -p -qh conv_animation.py ConvAnim

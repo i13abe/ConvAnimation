@@ -174,47 +174,61 @@ class ConvAnim(MovingCameraScene):
             kernel_square.get_corner(DOWN + RIGHT), kernel_square_on_img.get_corner(UP + RIGHT)
         )
 
-        # conved pixel
-        conved_pixel_obj = ImageMobject(np.uint8([[conved_img[0][0][0][0]]]))
-        conved_pixel_obj.height = img_obj_size / img_size
-        conved_pixel_obj.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
-        conved_pixel_obj.shift(kernel_square.get_corner(RIGHT + DOWN) + kernel_obj_size * 2 * RIGHT)
+        # conved image name
+        conved_name = Tex("Conved Image", font_size=18)
+        conved_name.set_color(WHITE)
+
+        # conved pixels
+        conved_pixel_list = []
+        for i in range(conved_img[0][0].shape[0]):
+            _conved_pixel_list = []
+            for j in range(conved_img[0][0].shape[1]):
+                _conved_pixel_list.append(ImageMobject(np.uint8([[conved_img[0][0][i][j]]])))
+                _conved_pixel_list[j].height = img_obj_size / img_size
+                _conved_pixel_list[j].set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
+            conved_pixel_list.append(_conved_pixel_list)
+        conved_pixel_list[0][0].shift(
+            kernel_square.get_corner(RIGHT + DOWN) + kernel_obj_size * 2 * RIGHT
+        )
 
         # conv equation
-        tex = r"a_0w_0+a_1w_1+a_2w_2+\\a_3w_3+a_4w_4+a_5w_5+\\a_6w_6+a_7w_7+a_8w_8="
+        tex = r"x_0w_0+x_1w_1+x_2w_2+\\x_3w_3+x_4w_4+x_5w_5+\\x_6w_6+x_7w_7+x_8w_8="
         conv_eq_text = MathTex(tex, font_size=12)
-        conv_eq_text.shift(conved_pixel_obj.get_edge_center(UP) + img_obj_size / img_size * 2 * UP)
+        conv_eq_text.shift(
+            conved_pixel_list[0][0].get_edge_center(UP) + img_obj_size / img_size * 2 * UP
+        )
 
         # kernel detail
         kernel_detail1 = Line(
-            kernel_square.get_corner(RIGHT + UP), conved_pixel_obj.get_corner(LEFT + UP)
+            kernel_square.get_corner(RIGHT + UP), conved_pixel_list[0][0].get_corner(LEFT + UP)
         )
         kernel_detail1.set_stroke(RED, width=2)
         kernel_detail2 = Line(
-            kernel_square_on_img.get_corner(RIGHT + DOWN), conved_pixel_obj.get_corner(LEFT + DOWN)
+            kernel_square_on_img.get_corner(RIGHT + DOWN),
+            conved_pixel_list[0][0].get_corner(LEFT + DOWN),
         )
         kernel_detail2.set_stroke(RED, width=2)
 
         # show
         self.add(img_obj)
         self.play(Create(img_name))
-        # self.wait()
+        self.wait()
         self.play(Create(img_square), Create(img_hlines), Create(img_vlines))
         self.play(FadeIn(kernel_obj), FadeIn(kernel_square), FadeIn(kernel_lines))
 
         self.play(self.camera.frame.animate.scale(0.4).move_to(kernel_square_on_img))
 
         self.play(FadeIn(kernel_name))
-        # self.wait()
+        self.wait()
 
         self.play(Create(kernel_connection1), Create(kernel_connection2))
         self.play(FadeIn(kernel_square_on_img))
 
         self.play(FadeIn(kernel_text_on_img), FadeIn(kernel_text))
 
-        self.add(conved_pixel_obj)
+        self.add(conved_pixel_list[0][0])
         self.play(Create(kernel_detail1), Create(kernel_detail2), Create(conv_eq_text))
-        # self.wait(2)
+        self.wait(2)
 
         self.play(
             Uncreate(kernel_name),
@@ -238,23 +252,67 @@ class ConvAnim(MovingCameraScene):
             ),
         )
 
-        self.play(self.camera.frame.animate.scale(1 / 0.4).move_to(img_obj))
+        self.play(self.camera.frame.animate.scale(1 / 0.4).move_to(img_obj).shift(1.5 * RIGHT))
 
         self.play(
-            conved_pixel_obj.animate.shift(
+            conved_pixel_list[0][0].animate.shift(
                 img_square.get_corner(UP + RIGHT)
-                - conved_pixel_obj.get_corner(UP + LEFT)
+                - conved_pixel_list[0][0].get_corner(UP + LEFT)
                 + kernel_obj_size * RIGHT
                 + img_obj_size / img_size * DOWN
             ),
         )
 
         kernel_detail1.put_start_and_end_on(
-            kernel_square.get_corner(RIGHT + UP), conved_pixel_obj.get_corner(LEFT + UP)
+            kernel_square.get_corner(RIGHT + UP), conved_pixel_list[0][0].get_corner(LEFT + UP)
         )
         kernel_detail2.put_start_and_end_on(
-            kernel_square.get_corner(RIGHT + DOWN), conved_pixel_obj.get_corner(LEFT + DOWN)
+            kernel_square.get_corner(RIGHT + DOWN), conved_pixel_list[0][0].get_corner(LEFT + DOWN)
         )
 
         self.play(Create(kernel_detail1), Create(kernel_detail2))
-        self.wait()
+
+        for i in range(conved_img[0][0].shape[0]):
+            if i != 0:
+                self.play(
+                    kernel_square.animate.shift(
+                        img_obj_size / img_size * j * LEFT + img_obj_size / img_size * DOWN
+                    ),
+                    kernel_lines.animate.shift(
+                        img_obj_size / img_size * j * LEFT + img_obj_size / img_size * DOWN
+                    ),
+                    kernel_obj.animate.shift(
+                        img_obj_size / img_size * j * LEFT + img_obj_size / img_size * DOWN
+                    ),
+                    kernel_detail1.animate.shift(
+                        img_obj_size / img_size * j * LEFT + img_obj_size / img_size * DOWN
+                    ),
+                    kernel_detail2.animate.shift(
+                        img_obj_size / img_size * j * LEFT + img_obj_size / img_size * DOWN
+                    ),
+                    run_time=0.1,
+                )
+                conved_pixel_list[i][0].shift(
+                    conved_pixel_list[(i - 1)][0].get_center() + img_obj_size / img_size * DOWN
+                )
+                self.add(conved_pixel_list[i][0])
+            for j in range(1, conved_img[0][0].shape[1]):
+                self.play(
+                    kernel_square.animate.shift(img_obj_size / img_size * RIGHT),
+                    kernel_lines.animate.shift(img_obj_size / img_size * RIGHT),
+                    kernel_obj.animate.shift(img_obj_size / img_size * RIGHT),
+                    kernel_detail1.animate.shift(img_obj_size / img_size * RIGHT),
+                    kernel_detail2.animate.shift(img_obj_size / img_size * RIGHT),
+                    run_time=0.02,
+                )
+                conved_pixel_list[i][j].shift(
+                    conved_pixel_list[i][j - 1].get_center() + img_obj_size / img_size * RIGHT
+                )
+                self.add(conved_pixel_list[i][j])
+
+        conved_name.shift(
+            conved_pixel_list[0][conved_img[0][0].shape[1] // 2].get_edge_center(UP) + 0.1 * UP
+        )
+        self.play(Create(conved_name))
+
+        self.wait(4)
