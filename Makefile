@@ -31,3 +31,10 @@ anim:
 manim:
 	cd conv_animation && \
 	poetry run manim -p -qh conv_animation.py ConvAnim
+
+
+# save mp4 to gif
+.PHINY: mp42gif
+mp42gif:
+	cd conv_animation && \
+	poetry run python -m mp42gif
