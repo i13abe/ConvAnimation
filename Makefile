@@ -16,10 +16,18 @@ test:
 # get mnist image
 .PHONY: get_mnist
 get_mnist:
-	poetry run python -m conv_animation.get_mnist_image
+	cd conv_animation && \
+	poetry run python -m get_mnist_image
 
 # get animation
 .PHONY: anim
 anim:
-	poetry run python -m conv_animation.image_visualization
+	cd conv_animation && \
+	poetry run python -m image_visualization
 
+
+# show manim
+.PHINY: manim
+manim:
+	cd conv_animation && \
+	poetry run manim -p -qh conv_animation.py ConvAnim
