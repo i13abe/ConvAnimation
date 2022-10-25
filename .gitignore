@@ -131,3 +131,6 @@ dmypy.json
 # Output image and gif are ignore
 *.png
 *.gif
+
+# Output video
+conv_animation/media/
